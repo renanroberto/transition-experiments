@@ -56,12 +56,20 @@ body {
   position: absolute;
   top: 50%;
   left: 5%;
-  transform: translateY(-100%);
 
   color: white;
   text-shadow: 0 2px 2px black;
   font-size: 1.5em;
   font-weight: 700;
+}
+
+.slide-text.animating {
+  animation: toLeft 3s cubic-bezier(0,0,0,1);
+}
+
+@keyframes toLeft {
+  from { transform: translateX(100px) }
+  to   { transform: translateX(0) }
 }
 
 .change-slide {
