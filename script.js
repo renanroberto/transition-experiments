@@ -1,3 +1,11 @@
+const config = {
+  container: document.querySelector('.slide-text'),
+  words: ["ARCHLINUX", "GENTOO"],
+  speed: 100,
+  duration: 4000,
+  idle: 2000,
+}
+
 window.onload = function() {
   // settings
   const NUMBER_OF_SLIDES = 2
@@ -56,10 +64,15 @@ window.onload = function() {
     .onReady(() => {
       multiTexturesPlane.playVideos()
 
+      freakOut(config.words[0], config)
+
       setInterval(() => {
         if (!slider.isAnimating) {
           slider.nextTexture = ((slider.activeTexture + 1) % NUMBER_OF_SLIDES) || NUMBER_OF_SLIDES
           slider.isAnimating = true
+
+          const word = config.words[slider.nextTexture - 1]
+          freakOut(word, config) 
         }
 
         multiTexturesPlane.uniforms.nextTexture.value = slider.nextTexture
@@ -96,4 +109,46 @@ window.onload = function() {
       // update our transition timer uniform
       multiTexturesPlane.uniforms.transitionTimer.value = slider.transitionTimer;
     })
+}
+
+function addAnimationClasses() {
+
+}
+
+function removeAnimationClasses() {
+
+}
+
+function freakOut(word, { container, speed, duration, idle }) {
+  return new Promise(resolve => {
+    const id = setInterval(() => {
+      container.innerHTML = randomize(word)
+    }, speed)
+
+    setTimeout(() => {
+      clearInterval(id)
+      container.innerHTML = word
+      
+      setTimeout(resolve, idle)
+    }, duration - idle)
+  })
+}
+
+function randomize(word) {
+  const letters = word.split('')
+  const rand = new Array()
+  
+  letters.forEach(() => {
+    let index = Math.floor(Math.random() * letters.length)
+
+    while (rand.includes(index)) {
+      index = (index + 1) % letters.length
+    }
+
+    rand.push(index)
+  })
+  
+  return rand
+    .map(i => letters[i])
+    .join('')
 }

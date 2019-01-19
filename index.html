@@ -5,16 +5,11 @@
     <link rel="stylesheet" type="text/css" href="style.css" />
   </head>
   <body>
-    <div id="page-wrap">
+    <div id="slide-wrap">
       <div id="canvas"></div>
 
+      <div class="slide-text"></div>
       <div class="flex-wrapper multi-textures" data-vs-id="multiple-textures-vs" data-fs-id="multiple-textures-fs">
-        <div style="display: none">
-          <span class="change-slide" data-slide="1">Slide 1</span>
-          <span class="change-slide" data-slide="2">Slide 2</span>
-          <span class="change-slide" data-slide="3">Slide 3</span>
-        </div>
-
         <!-- notice here we are using the data-sampler attribute to name our sampler uniforms -->
         <img src="https://www.martin-laxenaire.fr/libs/curtainsjs/examples/multiple-video-textures/images/displacement.jpg" data-sampler="displacement" />
         <video src="plane-video-texture.mp4" data-sampler="firstTexture"></video>
