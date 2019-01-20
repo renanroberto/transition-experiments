@@ -70,7 +70,8 @@ window.onload = function() {
         if (!slider.isAnimating) {
           slider.nextTexture = ((slider.activeTexture + 1) % NUMBER_OF_SLIDES) || NUMBER_OF_SLIDES
           slider.isAnimating = true
-          addAnimationClasses()
+          triggerAnimationText()
+          addAnimationClass()
 
           const word = config.words[slider.nextTexture - 1]
           freakOut(word, config) 
@@ -95,7 +96,7 @@ window.onload = function() {
         if(slider.transitionTimer >= 120) {
           // stop animation
           slider.isAnimating = false;
-          removeAnimationClasses()
+          removeAnimationClass()
 
           // update the active texture
           slider.activeTexture = slider.nextTexture;
@@ -113,17 +114,18 @@ window.onload = function() {
     })
 }
 
-function addAnimationClasses() {
+function triggerAnimationText() {
   const { container } = config
 
-  container.classList.add('animating')
+  setTimeout(() => container.classList.remove('animating'))
+  setTimeout(() => container.classList.add('animating'), 100)
+}
+
+function addAnimationClass() {
   document.querySelector('#slide-wrap').classList.add('animating')
 }
 
-function removeAnimationClasses() {
-  const { container } = config
-
-  container.classList.remove('animating')
+function removeAnimationClass() {
   document.querySelector('#slide-wrap').classList.remove('animating')
 }
 
