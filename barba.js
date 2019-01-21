@@ -3,11 +3,13 @@ document.addEventListener("DOMContentLoaded", function() {
 
   const hideShowTransition = Barba.BaseTransition.extend({
     start() {
+      clearCanvas()
       this.newContainerLoading.then(this.finish.bind(this))
     },
 
     finish() {
       document.body.scrollTop = 0
+      render()
       this.done()
     }
   })

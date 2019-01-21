@@ -1,17 +1,16 @@
 const config = {
-  container: document.querySelector('.slide-text'),
   words: ["ARCHLINUX", "GENTOO"],
   speed: 100,
   duration: 4000,
   idle: 2000,
 }
 
-window.onload = function() {
+let webGLCurtains
+let slideInterval
+
+function render() {
   // settings
   const NUMBER_OF_SLIDES = 2
-
-  // our canvas container
-  const canvasContainer = document.getElementById("canvas")
 
   // here we will handle which texture is visible and the timer to transition between images
   const slider = {
@@ -22,10 +21,13 @@ window.onload = function() {
   }
 
   // set up our WebGL context and append the canvas to our wrapper
-  const webGLCurtain = new Curtains("canvas")
+  webGLCurtain = new Curtains("canvas")
 
   // get our plane element
   const planeElements = document.querySelector(".multi-textures")
+
+  // cancel render if there is no plane
+  if (!planeElements) return
 
   // could be useful to get pixel ratio
   const pixelRatio = window.devicePixelRatio ? window.devicePixelRatio : 1.0
@@ -66,7 +68,7 @@ window.onload = function() {
 
       freakOut(config.words[0], config)
 
-      setInterval(() => {
+      slideInterval = setInterval(() => {
         if (!slider.isAnimating) {
           slider.nextTexture = ((slider.activeTexture + 1) % NUMBER_OF_SLIDES) || NUMBER_OF_SLIDES
           slider.isAnimating = true
@@ -114,30 +116,42 @@ window.onload = function() {
     })
 }
 
-function triggerAnimationText() {
-  const { container } = config
+function clearCanvas() {
+  clearInterval(slideInterval)
+  webGLCurtain.dispose()
+}
 
-  setTimeout(() => container.classList.remove('animating'))
-  setTimeout(() => container.classList.add('animating'), 100)
+function triggerAnimationText() {
+  const element = document.querySelector('.slide-text')
+
+  if (!element) return
+
+  setTimeout(() => element.classList.remove('animating'))
+  setTimeout(() => element.classList.add('animating'), 100)
 }
 
 function addAnimationClass() {
-  document.querySelector('#slide-wrap').classList.add('animating')
+  const element = document.querySelector('#slide-wrap')
+  if (element) element.classList.add('animating')
 }
 
 function removeAnimationClass() {
-  document.querySelector('#slide-wrap').classList.remove('animating')
+  const element = document.querySelector('#slide-wrap')
+  if (element) element.classList.remove('animating')
 }
 
-function freakOut(word, { container, speed, duration, idle }) {
+function freakOut(word, { speed, duration, idle }) {
   return new Promise(resolve => {
     const id = setInterval(() => {
-      container.innerHTML = randomize(word)
+      const element = document.querySelector('.slide-text')
+      if (element) element.innerHTML = randomize(word)
     }, speed)
 
     setTimeout(() => {
       clearInterval(id)
-      container.innerHTML = word
+
+      const element = document.querySelector('.slide-text')
+      if (element) element.innerHTML = word
       
       setTimeout(resolve, idle)
     }, duration - idle)
@@ -162,3 +176,5 @@ function randomize(word) {
     .map(i => letters[i])
     .join('')
 }
+
+window.onload = render
