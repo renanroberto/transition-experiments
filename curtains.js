@@ -8,9 +8,6 @@ const config = {
 let webGLCurtains
 
 function render() {
-  // settings
-  const NUMBER_OF_SLIDES = 2
-
   // here we will handle which texture is visible and the timer to transition between images
   const slider = {
     activeTexture: 1,
@@ -59,6 +56,7 @@ function render() {
   }
 
   const multiTexturesPlane = webGLCurtain.addPlane(planeElements, params)
+  const numOfSlides = multiTexturesPlane.videos.length
 
   // create our plane
   multiTexturesPlane
@@ -69,10 +67,13 @@ function render() {
 
       setInterval(() => {
         if (!slider.isAnimating) {
-          slider.nextTexture = ((slider.activeTexture + 1) % NUMBER_OF_SLIDES) || NUMBER_OF_SLIDES
+          slider.nextTexture = ((slider.activeTexture + 1) % numOfSlides) || numOfSlides
           slider.isAnimating = true
+
           triggerAnimationText()
           addAnimationClass()
+
+          restartVideo(multiTexturesPlane.videos[slider.nextTexture - 1])
 
           const word = config.words[slider.nextTexture - 1]
           freakOut(word, config) 
@@ -136,6 +137,10 @@ function addAnimationClass() {
 function removeAnimationClass() {
   const element = document.querySelector('#slide-wrap')
   if (element) element.classList.remove('animating')
+}
+
+function restartVideo(video) {
+  video.currentTime = 0
 }
 
 function freakOut(word, { speed, duration, idle }) {
