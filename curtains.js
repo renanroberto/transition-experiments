@@ -6,8 +6,6 @@ const config = {
 }
 
 let webGLCurtains
-let slideInterval
-let freakTimeout
 
 function render() {
   // settings
@@ -22,7 +20,7 @@ function render() {
   }
 
   // set up our WebGL context and append the canvas to our wrapper
-  webGLCurtain = new Curtains("canvas")
+  webGLCurtain = new Curtains("canvas", true)
 
   // get our plane element
   const planeElements = document.querySelector(".multi-textures")
@@ -69,7 +67,7 @@ function render() {
 
       freakOut(config.words[0], config)
 
-      slideInterval = setInterval(() => {
+      setInterval(() => {
         if (!slider.isAnimating) {
           slider.nextTexture = ((slider.activeTexture + 1) % NUMBER_OF_SLIDES) || NUMBER_OF_SLIDES
           slider.isAnimating = true
@@ -118,8 +116,6 @@ function render() {
 }
 
 function clearCanvas() {
-  clearInterval(slideInterval)
-  clearTimeout(freakTimeout)
   webGLCurtain.dispose()
 }
 
@@ -161,20 +157,21 @@ function freakOut(word, { speed, duration, idle }) {
 }
 
 function randomize(word) {
+  if (word.includes(' ')) {
+    const words = word.split(' ')
+    return words.map(randomize).join(' ')
+  }
+  
   const letters = word.split('')
-  const rand = new Array()
+  const newLetters = new Array()
   
-  letters.forEach(() => {
-    let index = Math.floor(Math.random() * letters.length)
+  const length = letters.length
+  for (let i = 0; i < length; i++) {
+    const rand = Math.floor(Math.random() * letters.length)
+    const letter = letters.splice(rand, 1)[0]
 
-    while (rand.includes(index)) {
-      index = (index + 1) % letters.length
-    }
-
-    rand.push(index)
-  })
+    newLetters.push(letter)
+  }
   
-  return rand
-    .map(i => letters[i])
-    .join('')
+  return newLetters.join('')
 }
