@@ -23,9 +23,11 @@
             <div class="slide-text animating"></div>
             <div class="flex-wrapper multi-textures" data-vs-id="multiple-textures-vs" data-fs-id="multiple-textures-fs">
               <!-- notice here we are using the data-sampler attribute to name our sampler uniforms -->
+              <!-- Precisa adicionar novo video aqui -->
               <img src="displacement.jpg" data-sampler="displacement" />
-              <video src="video1.mp4" data-sampler="firstTexture"></video>
-              <video src="video2.mp4" data-sampler="secondTexture"></video>
+              <video src="video1.mp4" data-sampler="texture1"></video>
+              <video src="video2.mp4" data-sampler="texture2"></video>
+              <video src="video3.mp4" data-sampler="texture3"></video>
             </div>
           </div>
         </main>
@@ -82,8 +84,10 @@
 
       // our textures samplers
       // notice how it matches our data-sampler attributes
-      uniform sampler2D firstTexture;
-      uniform sampler2D secondTexture;
+      // Precisa adicionar novo video aqui
+      uniform sampler2D texture1;
+      uniform sampler2D texture2;
+      uniform sampler2D texture3;
       uniform sampler2D displacement;
 
       void main( void ) {
@@ -106,21 +110,25 @@
         vec2 secondDisplacementCoords = vec2(textureCoords.x - (1.0 - displacementFactor) * (displacementTexture.r * effectFactor.x), textureCoords.y - (1.0 - displacementFactor) * (displacementTexture.r * effectFactor.y));
         
         // apply it on our active slide
+        // Precisa adicionar novo video aqui
         vec4 firstDistortedColor;
         if(uActiveTexture == 1) {
-           firstDistortedColor = texture2D(firstTexture, firstDisplacementCoords);
-        }
-        else if(uActiveTexture == 2) {
-           firstDistortedColor = texture2D(secondTexture, firstDisplacementCoords);
+           firstDistortedColor = texture2D(texture1, firstDisplacementCoords);
+        } else if(uActiveTexture == 2) {
+           firstDistortedColor = texture2D(texture2, firstDisplacementCoords);
+        } else if(uActiveTexture == 3) {
+           firstDistortedColor = texture2D(texture3, firstDisplacementCoords);
         }
         
         // apply it on our next slide
+        // Precisa adicionar novo video aqui
         vec4 secondDistortedColor;
         if(uNextTexture == 1) {
-           secondDistortedColor = texture2D(firstTexture, secondDisplacementCoords);
-        }
-        else if(uNextTexture == 2) {
-           secondDistortedColor = texture2D(secondTexture, secondDisplacementCoords);
+           secondDistortedColor = texture2D(texture1, secondDisplacementCoords);
+        } else if(uNextTexture == 2) {
+           secondDistortedColor = texture2D(texture2, secondDisplacementCoords);
+        } else if(uNextTexture == 3) {
+           secondDistortedColor = texture2D(texture3, secondDisplacementCoords);
         }
 
         // mix both texture

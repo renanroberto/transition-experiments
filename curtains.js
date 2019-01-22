@@ -1,7 +1,7 @@
 const config = {
-  words: ["ARCHLINUX", "GENTOO"],
+  words: ["ARCHLINUX", "GENTOO", "KALI LINUX"],
   speed: 100,
-  duration: 4000,
+  duration: 5000,
   idle: 2000,
 }
 
@@ -80,7 +80,7 @@ function render() {
         }
 
         multiTexturesPlane.uniforms.nextTexture.value = slider.nextTexture
-      }, 5000)
+      }, config.duration)
 
       
       // on resize, update the resolution uniform
@@ -156,7 +156,7 @@ function freakOut(word, { speed, duration, idle }) {
       const element = document.querySelector('.slide-text')
       if (element) element.innerHTML = word
       
-      setTimeout(resolve, idle)
+      setTimeout(resolve, idle + 1000)
     }, duration - idle)
   })
 }
