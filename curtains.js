@@ -7,6 +7,7 @@ const config = {
 
 let webGLCurtains
 let slideInterval
+let freakTimeout
 
 function render() {
   // settings
@@ -118,6 +119,7 @@ function render() {
 
 function clearCanvas() {
   clearInterval(slideInterval)
+  clearTimeout(freakTimeout)
   webGLCurtain.dispose()
 }
 
@@ -147,7 +149,7 @@ function freakOut(word, { speed, duration, idle }) {
       if (element) element.innerHTML = randomize(word)
     }, speed)
 
-    setTimeout(() => {
+    freakTimeout = setTimeout(() => {
       clearInterval(id)
 
       const element = document.querySelector('.slide-text')
@@ -176,5 +178,3 @@ function randomize(word) {
     .map(i => letters[i])
     .join('')
 }
-
-window.onload = render
