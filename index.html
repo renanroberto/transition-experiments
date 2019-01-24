@@ -99,13 +99,14 @@
 
         // our displacement factor is a float varying from 1 to 0 based on the timer
         float displacementFactor = 1.0 - (cos(uTransitionTimer / (120.0 / 3.141592)) + 1.0) / 2.0;
+        float negativeDisplacementFactor = -1.0 * displacementFactor;
 
         // the effect factor will tell which way we want to displace our pixels
         // the farther from the center of the videos, the stronger it will be
-        vec2 effectFactor = vec2((textureCoords.x - 0.5) * 0.75, (textureCoords.y - 0.5) * 0.75);
+        vec2 effectFactor = vec2(textureCoords.x, (textureCoords.y - 0.5) * 0.75);
 
         // calculate our displaced coordinates to our first video
-        vec2 firstDisplacementCoords = vec2(textureCoords.x - displacementFactor * (displacementTexture.r * effectFactor.x), textureCoords.y- displacementFactor * (displacementTexture.r * effectFactor.y));
+        vec2 firstDisplacementCoords = vec2(textureCoords.x - (negativeDisplacementFactor) * (displacementTexture.r * effectFactor.x), textureCoords.y- negativeDisplacementFactor * (displacementTexture.r * effectFactor.y));
         // opposite displacement effect on the second video
         vec2 secondDisplacementCoords = vec2(textureCoords.x - (1.0 - displacementFactor) * (displacementTexture.r * effectFactor.x), textureCoords.y - (1.0 - displacementFactor) * (displacementTexture.r * effectFactor.y));
         
